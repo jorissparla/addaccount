@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchTeams, fetchLocations } from './actions'
+import { fetchTeams, fetchLocations, fetchGuests } from './actions'
 import AccountAdd from './AccountAdd'
 
 
@@ -13,6 +13,7 @@ const AccountWrapper = React.createClass({
     console.log(this.props)
     this.props.fetchTeams()
     this.props.fetchLocations()
+    this.props.fetchGuests()
   },
   
   render () {
@@ -29,9 +30,10 @@ const AccountWrapper = React.createClass({
 const mapStateToProps = (state) => {
   return {
     teams: state.main.teams,
-    locations: state.main.locations
+    locations: state.main.locations,
+    guests: state.main.guests
   }
 }
 
-export default connect(mapStateToProps, { fetchTeams, fetchLocations })( AccountWrapper )
+export default connect(mapStateToProps, { fetchTeams, fetchLocations, fetchGuests })( AccountWrapper )
 

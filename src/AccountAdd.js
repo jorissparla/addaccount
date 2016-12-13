@@ -19,13 +19,12 @@ injectTapEventPlugin();
 
 
 const users = [
-  { login: 'infor\jsparla', firstName: 'Joris', lastName: 'Sparla', navid: '123456'},
-  { login: 'infor\gwaede', firstName: 'Graham', lastName: 'Waede', navid: '023456'},
+  { login: 'infor\\jsparla', firstName: 'Joris', lastName: 'Sparla', navid: '123456'},
+  { login: 'infor\\gwaede', firstName: 'Graham', lastName: 'Waede', navid: '023456'},
 ]
 
-const mappedUsers = (users) => {
-  users.map(({login, firstName, lastName}) => { return {value: login, text: `${firstName} ${lastName}` }})
-}
+const mappedUsers = users.map(({login, firstName, lastName}) => { return {key: login, description: `${firstName} ${lastName}` }})
+console.log('mappedUsers',mappedUsers)
 const muiTheme = getMuiTheme({
   palette: {
     accent1Color: deepOrange500,
@@ -86,9 +85,14 @@ let AccountAddForm = React.createClass({
           <div className='col s4'>
             <Field
               name='login'
-              component={TextField}
+              component={AutoComplete}
+              openOnFocus={true}
               floatingLabelText="Login"
-              type='text'
+              dataSource={mappedUsers}
+              onClick={(e) => console.log(e, this)}
+              filter={AutoComplete.caseInsensitiveFilter}
+              dataSourceConfig={dataSourceConfig}
+              maxSearchResults={5}
               />
             <div className="row">
             <div className='col s3'>
@@ -190,13 +194,16 @@ const selector = formValueSelector('accountadd')
 AccountAddForm = connect(
   state => {
     const login = selector(state, 'login')
-    
-    const firstName = selector(state, 'firstName')
-    const lastName = selector(state, 'lastName')
-    const fullName = selector(state, 'fullName')
-  console.log('firstName', firstName, fullName)
+    console.log('login', login)
+    const user = users.find(user=> user.login === login)
+    //if (!user) return {}
+
+    const { firstName, lastName, navid } = user || { firstName: selector(state,'firstName'), lastName: selector(state,'lastName'), navid: selector(state,'navid')}
+  console.log('firstName', firstName, lastName)
     return {
       initialValues: {
+      firstName,
+      lastName,
       fullName: firstName+ ' ' + lastName,
       email: `${firstName}.${lastName}@infor.com`
 

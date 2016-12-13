@@ -1,6 +1,7 @@
 import axios from 'axios'
 export const ADD_ACCOUNT = 'ADD_ACCOUNT'
 export const GET_TEAMS = 'GET_TEAMS'
+export const GET_GUESTS = 'GET_GUESTS'
 export const GET_LOCATIONS = 'GET_LOCATIONS'
 const ROOT_URL = 'http://nlbavwtls22:3001/api'
 
@@ -30,5 +31,16 @@ const fetchLocations = () => {
   }
 }
 
+const fetchGuests = () => {
+  console.log('GET_GUESTS')
+  const request = axios.get(ROOT_URL+'/guests')
+  return {
+    type: GET_GUESTS,
+    payload: request
+  }
+}
+
+
 exports.fetchTeams = fetchTeams
 exports.fetchLocations = fetchLocations
+exports.fetchGuests = fetchGuests
