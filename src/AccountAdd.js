@@ -23,8 +23,11 @@ const users = [
   { login: 'infor\\gwaede', firstName: 'Graham', lastName: 'Waede', navid: '023456'},
 ]
 
-const mappedUsers = users.map(({login, firstName, lastName}) => { return {key: login, description: `${firstName} ${lastName}` }})
-console.log('mappedUsers',mappedUsers)
+//const mappedUsers = users.map(({login, firstName, lastName}) => { return {key: login, description: `${firstName} ${lastName}` }})
+const mapUsers =(users) => users.map(({login, firstName, lastName}) => { return {key: login, description: `${firstName} ${lastName}` }})
+
+const regions = [ 'EMEA', 'APJ', 'NA']
+//console.log('mappedUsers',mappedUsers)
 const muiTheme = getMuiTheme({
   palette: {
     accent1Color: deepOrange500,
@@ -77,11 +80,13 @@ let AccountAddForm = React.createClass({
   },
   
   render () {
-    const { handleSubmit, pristine, reset, submitting, validate, teams} = this.props
+    const { handleSubmit, pristine, reset, submitting, validate, teams, users, locations} = this.props
+    const mappedUsers = mapUsers(users)
+    console.log('mappedUsers', mappedUsers)
     return (
        <MuiThemeProvider muiTheme={muiTheme}>
       <Paper style={style} zDepth={2} >
-        <form className='col s12' onSubmit={handleSubmit(doSubmit)}>
+        <form className='col s12' onSubmit={handleSubmit(this.props.onSave)}>
           <div className='col s4'>
             <Field
               name='login'
@@ -104,17 +109,6 @@ let AccountAddForm = React.createClass({
                 ref="firstName" withRef
               />
               </div>
-            <div className='col s1'>
-              <Field
-                name='navid'
-                floatingLabelText="Navigator Id"
-                component={TextField}
-                type='text'
-                ref="navid" withRef
-              />              
-              </div>
-            </div>
-
             <div className='col s4'>
               <Field
                 name='lastName'
@@ -124,6 +118,16 @@ let AccountAddForm = React.createClass({
                 
                 ref="lastName" withRef
               />
+            </div>
+            <div className='col s1'>
+              <Field
+                name='navid'
+                floatingLabelText="Navigator Id"
+                component={TextField}
+                ref="navid" withRef
+              />              
+              </div>
+
             </div>
             <div className='col s4'>
               <Field
@@ -150,7 +154,7 @@ let AccountAddForm = React.createClass({
             name = 'team'
             component={AutoComplete}
             openOnFocus={true}
-            floatingLabelText="Type Teams"
+            floatingLabelText="Team"
             onNewRequest={value => {
               console.log('AutoComplete ', value) // eslint-disable-line no-console
             }}
@@ -166,9 +170,17 @@ let AccountAddForm = React.createClass({
               openOnFocus={true}
               floatingLabelText="Type Location"
               filter={AutoComplete.caseInsensitiveFilter}
-              dataSource={this.props.locations}
+              dataSource={locations}
               dataSourceConfig={dataSourceConfig}
               maxSearchResults={5}
+            />
+            <Field 
+              name='region' 
+              component={AutoComplete}
+              openOnFocus={true}
+              floatingLabelText="region"
+              filter={AutoComplete.caseInsensitiveFilter}
+              dataSource={regions}
             />
           </div>
 
@@ -194,18 +206,18 @@ const selector = formValueSelector('accountadd')
 AccountAddForm = connect(
   state => {
     const login = selector(state, 'login')
-    console.log('login', login)
-    const user = users.find(user=> user.login === login)
+    const user = state.main.newusers.find(user=> user.login === login)
     //if (!user) return {}
 
-    const { firstName, lastName, navid } = user || { firstName: selector(state,'firstName'), lastName: selector(state,'lastName'), navid: selector(state,'navid')}
-  console.log('firstName', firstName, lastName)
+    const { firstName, lastName, navid, region } = user || { firstName: selector(state,'firstName'), lastName: selector(state,'lastName'), navid: selector(state,'navid'), region: 'EMEA'}
     return {
       initialValues: {
-      firstName,
-      lastName,
-      fullName: firstName+ ' ' + lastName,
-      email: `${firstName}.${lastName}@infor.com`
+        firstName,
+        lastName,
+        navid,
+        region: region || 'EMEA',
+        fullName: firstName+ ' ' + lastName,
+        email: `${firstName}.${lastName}@infor.com`
 
       }
     }
