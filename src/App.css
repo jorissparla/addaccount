@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-logo {
@@ -9,15 +11,36 @@
 
 .App-header {
   background-color: #222;
-  height: 150px;
   padding: 20px;
   color: white;
 }
 
-.App-intro {
-  font-size: large;
+.main {
+  display: flex;
+  justify-content: center;
 }
 
+.AccountWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.App-intro {
+  font-size: large;
+  font-family: 'Oswald';
+  color: white;
+  font-size: 32px;
+  text-align: left;
+  margin-left: 20px;
+  align-content: center;
+  display: flex;
+  justify-content: center
+}
+body {
+  margin-left: 50px;
+  background:#ffc600;
+}
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

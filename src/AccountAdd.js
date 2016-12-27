@@ -4,9 +4,10 @@ import { Field, reduxForm, formValueSelector } from 'redux-form'
 
 import Paper from 'material-ui/Paper'
 import RaisedButton from 'material-ui/RaisedButton'
-import {deepOrange500} from 'material-ui/styles/colors';
+import { deepOrange500 } from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import Divider from 'material-ui/Divider';
 import { AutoComplete as MUIAutoComplete } from 'material-ui'
 
 import {
@@ -28,23 +29,17 @@ const mapUsers =(users) => users.map(({login, firstName, lastName}) => { return 
 
 const regions = [ 'EMEA', 'APJ', 'NA']
 //console.log('mappedUsers',mappedUsers)
-const muiTheme = getMuiTheme({
-  palette: {
-    accent1Color: deepOrange500,
-  },
-})
 
-const doSubmit = values => {
-  window.alert(`You submitted:\n\n${JSON.stringify(values, null, 2)}`)
-  console.log('Submit', values)
-}
-const style = {
-  margin: 12 ,
-  width: '20%' 
-}
 
 const buttonStyle = {
-  color: deepOrange500
+  backgroundColor: '#ffc600',
+  labelColor: 'white',
+  margin: '20px'
+}
+const buttonStyle2 = {
+  backgroundColor: 'black',
+  labelColor: 'white',
+  margin: '20px'
 }
 
 const dataSourceConfig = {
@@ -84,111 +79,111 @@ let AccountAddForm = React.createClass({
     const mappedUsers = mapUsers(users)
     console.log('mappedUsers', mappedUsers)
     return (
-       <MuiThemeProvider muiTheme={muiTheme}>
-      <Paper style={style} zDepth={2} >
-        <form className='col s12' onSubmit={handleSubmit(this.props.onSave)}>
-          <div className='col s4'>
-            <Field
-              name='login'
-              component={AutoComplete}
-              openOnFocus={true}
-              floatingLabelText="Login"
-              dataSource={mappedUsers}
-              onClick={(e) => console.log(e, this)}
-              filter={AutoComplete.caseInsensitiveFilter}
-              dataSourceConfig={dataSourceConfig}
-              maxSearchResults={5}
-              />
-            <div className="row">
-            <div className='col s3'>
-              <Field
-                name='firstName'
-                floatingLabelText="First Name"
-                component={TextField}
-                type='text'
-                ref="firstName" withRef
-              />
-              </div>
-            <div className='col s4'>
-              <Field
-                name='lastName'
-                floatingLabelText="Last Name"
-                component={TextField}
-                type='text'
-                
-                ref="lastName" withRef
-              />
-            </div>
-            <div className='col s1'>
-              <Field
-                name='navid'
-                floatingLabelText="Navigator Id"
-                component={TextField}
-                ref="navid" withRef
-              />              
-              </div>
-
-            </div>
-            <div className='col s4'>
-              <Field
-                name='fullName'
-                floatingLabelText="Full Name"
-                component={TextField}
-                type='text'
-                onClick= { () => { console.log(this.refs)}}
-                ref="fullName" withRef
-              />
-            </div>
-            <div className='col s4'>
-              <Field
-                name='email'
-                floatingLabelText="Email"
-                component={TextField}
-                type='text'
-               />
-            </div>
-
-          </div>
-          <div className='col s4'>
-          <Field 
-            name = 'team'
+      <form className='col s12' onSubmit={handleSubmit(this.props.onSave)}>
+        <div className='col s4'>
+          <Field
+            name='login'
             component={AutoComplete}
             openOnFocus={true}
-            floatingLabelText="Team"
-            onNewRequest={value => {
-              console.log('AutoComplete ', value) // eslint-disable-line no-console
-            }}
-            onClick= { (e) => console.log(this,e.target.value)}
-            dataSource={teams}
+            floatingLabelText="Start typing to find name (Login)"
+            dataSource={mappedUsers}
+            onClick={(e) => console.log(e, this)}
+            filter={AutoComplete.caseInsensitiveFilter}
             dataSourceConfig={dataSourceConfig}
+            maxSearchResults={5}
+            />
+          <div className="row">
+          <div className='col s3'>
+            <Field
+              name='firstName'
+              floatingLabelText="First Name"
+              component={TextField}
+              type='text'
+              ref="firstName" withRef
+            />
+            </div>
+          <div className='col s4'>
+            <Field
+              name='lastName'
+              floatingLabelText="Last Name"
+              component={TextField}
+              
+              ref="lastName" withRef
+            />
+          </div>
+          <div className='col s1'>
+            <Field
+              name='navid'
+              floatingLabelText="Navigator Id"
+              component={TextField}
+              ref="navid" withRef
+            />              
+            </div>
+
+          </div>
+          <div className='col s4'>
+            <Field
+              name='fullName'
+              floatingLabelText="Full Name"
+              component={TextField}
+              type='text'
+              onClick= { () => { console.log(this.refs)}}
+              ref="fullName" withRef
             />
           </div>
           <div className='col s4'>
-            <Field 
-              name='location' 
-              component={AutoComplete}
-              openOnFocus={true}
-              floatingLabelText="Type Location"
-              filter={AutoComplete.caseInsensitiveFilter}
-              dataSource={locations}
-              dataSourceConfig={dataSourceConfig}
-              maxSearchResults={5}
-            />
-            <Field 
-              name='region' 
-              component={AutoComplete}
-              openOnFocus={true}
-              floatingLabelText="region"
-              filter={AutoComplete.caseInsensitiveFilter}
-              dataSource={regions}
-            />
+            <Field
+              name='email'
+              floatingLabelText="Email"
+              component={TextField}
+              type='text'
+              />
           </div>
 
-          <div className='row'>
-            <RaisedButton primary={true} style={buttonStyle} label='Submit' onSubmit={doSubmit} type='submit' />
+        </div>
+        <div className='col s4'>
+        <Field 
+          name = 'team'
+          component={AutoComplete}
+          openOnFocus={true}
+          floatingLabelText="Start typing to find Team"
+          onNewRequest={value => {
+            console.log('AutoComplete ', value) // eslint-disable-line no-console
+          }}
+          onClick= { (e) => console.log(this,e.target.value)}
+          dataSource={teams}
+          dataSourceConfig={dataSourceConfig}
+          />
+        </div>
+        <div className='col s4'>
+          <Field 
+            name='location' 
+            component={AutoComplete}
+            openOnFocus={true}
+            floatingLabelText="Type Location"
+            filter={AutoComplete.caseInsensitiveFilter}
+            dataSource={locations}
+            dataSourceConfig={dataSourceConfig}
+            maxSearchResults={5}
+          />
+            <div className='col s4'>
+          <Field 
+            name='region' 
+            component={AutoComplete}
+            openOnFocus={true}
+            floatingLabelText="region"
+            filter={AutoComplete.caseInsensitiveFilter}
+            dataSource={regions}
+          />
           </div>
-        </form></Paper>
-        </MuiThemeProvider>)
+        </div>
+        <div className='row'>
+        <div className="col s4">
+          <RaisedButton primary={true} style={buttonStyle} label='Submit'  type='submit' />
+          <RaisedButton  secondary={true} style={buttonStyle2} label='Cancel'  type='submit' />
+        </div>
+        </div>
+      </form>)
   }
 })
 
@@ -209,7 +204,9 @@ AccountAddForm = connect(
     const user = state.main.newusers.find(user=> user.login === login)
     //if (!user) return {}
 
-    const { firstName, lastName, navid, region } = user || { firstName: selector(state,'firstName'), lastName: selector(state,'lastName'), navid: selector(state,'navid'), region: 'EMEA'}
+    let { firstName, lastName, navid, region } = user || { firstName: selector(state,'firstName'), lastName: selector(state,'lastName'), navid: selector(state,'navid'), region: 'EMEA'}
+    if (!firstName) firstName = '' 
+    if (!lastName) lastName = '' 
     return {
       initialValues: {
         firstName,
