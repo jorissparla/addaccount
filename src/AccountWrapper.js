@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { fetchTeams, fetchLocations, fetchGuests, fetchNewUsers, updateGuest } from './actions'
+import { fetchTeams, fetchLocations, fetchGuests, fetchNewUsers, updateGuest, fetchAllUsers } from './actions'
 import AccountAdd from './AccountAdd'
 
 import Paper from 'material-ui/Paper'
@@ -9,6 +9,7 @@ import {deepOrange500} from 'material-ui/styles/colors';
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import Snackbar from 'material-ui/Snackbar';
+import AlertDialog from './AlertDialog'
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -22,7 +23,7 @@ const style = {
   padding: '20px',
   display: 'flex',
   flexGrow: '0.4',
-  'justify-content': 'space-around'
+  justifyContent: 'space-around'
 
 }
 
@@ -34,10 +35,15 @@ const AccountWrapper = React.createClass({
     }
   },
   componentDidMount () {
-    this.props.fetchTeams()
+    this.props.fetchTeams().then( ()=> {
+      let err = 'You are not authorized'
+        this.setState({ open: true, err:err})
+    } )
     this.props.fetchLocations()
     this.props.fetchGuests()
     this.props.fetchNewUsers()
+    this.props.fetchAllUsers()
+    console.log('mode', this.props.mode)
   },
   doSubmit (values) {
     window.alert(`You submitted Parent:\n\n${JSON.stringify(values, null, 2)}`)
@@ -52,7 +58,8 @@ const AccountWrapper = React.createClass({
   },
   
   render () {
-    const { teams, locations, guests, newusers } = this.props
+    const { teams, locations, guests, newusers, mode, accounts } = this.props
+    if (this.state.err) return <AlertDialog message={this.state.err} url='http://www.google.com'/>
     if (!newusers || !teams || !guests || !newusers ) return <div>Loading</div>
     const reduceGuests = guests.map(guest=>guest.login)
     const users = newusers.filter(user=> {
@@ -60,10 +67,12 @@ const AccountWrapper = React.createClass({
         if (res >=0 ) return true
         else return false }
     )
+    if (mode === 'new') {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
       <div className='AccountWrapper'>
       <Paper style={style} zDepth={2} >
+
         <AccountAdd teams={teams} locations={locations} users={users} onSave={this.doSubmit}/>
       </Paper>
        <Snackbar
@@ -73,8 +82,26 @@ const AccountWrapper = React.createClass({
           onRequestClose={this.handleRequestClose}
         />
       </div>
-         </MuiThemeProvider>
+    </MuiThemeProvider>
+    ) } else {
+          return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+      <div className='AccountWrapper'>
+      <Paper style={style} zDepth={2} >
+
+        <AccountAdd teams={teams} locations={locations} users={accounts} onSave={this.doSubmit}/>
+      </Paper>
+       <Snackbar
+          open={this.state.open}
+          message={this.state.err}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
+      </div>
+    </MuiThemeProvider>
     )
+
+    }
   }
 })
 
@@ -83,9 +110,10 @@ const mapStateToProps = (state) => {
     teams: state.main.teams,
     locations: state.main.locations,
     guests: state.main.guests,
-    newusers: state.main.newusers
+    newusers: state.main.newusers,
+    accounts: state.main.accounts
   }
 }
 
-export default connect(mapStateToProps, { fetchTeams, fetchLocations, fetchGuests, fetchNewUsers, updateGuest })( AccountWrapper )
+export default connect(mapStateToProps, { fetchTeams, fetchLocations, fetchGuests, fetchNewUsers, updateGuest,fetchAllUsers })( AccountWrapper )
 

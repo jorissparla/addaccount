@@ -20,8 +20,13 @@ const App = React.createClass({
            <Match
               exactly
               pattern='/'
-              component={AccountWrapper}
+              component={() => <AccountWrapper mode='new' />}
         />
+        <Match
+              exactly
+              pattern='/edit'
+              component={() => <AccountWrapper mode='edit' />}
+        />     
         </div>
           </div>
         </Provider>

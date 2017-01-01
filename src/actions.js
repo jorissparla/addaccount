@@ -4,6 +4,7 @@ export const UPDATE_ACCOUNT = 'UPDATE_ACCOUNT'
 export const GET_TEAMS = 'GET_TEAMS'
 export const GET_GUESTS = 'GET_GUESTS'
 export const GET_NEWUSERS = 'GET_NEWUSERS'
+export const GET_ALLUSERS = 'GET_ALLUSERS'
 export const GET_LOCATIONS = 'GET_LOCATIONS'
 const ROOT_URL = 'http://nlbavwtls22:3001/api'
 
@@ -50,6 +51,15 @@ const updateGuest = (props) => {
   }
 }
 
+const fetchAllUsers = () => {
+  console.log('GET_ALLUSERS')
+  const request = axios.get(ROOT_URL+'/users')
+  return {
+    type: GET_ALLUSERS,
+    payload: request
+  }
+}
+
 
 const fetchNewUsers = () => {
   console.log('GET_NEWUSERS')
@@ -62,6 +72,7 @@ const fetchNewUsers = () => {
 
 
 exports.fetchNewUsers = fetchNewUsers
+exports.fetchAllUsers = fetchAllUsers
 exports.fetchTeams = fetchTeams
 exports.fetchLocations = fetchLocations
 exports.fetchGuests = fetchGuests

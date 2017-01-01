@@ -1,11 +1,12 @@
-import { ADD_ACCOUNT, GET_TEAMS, GET_LOCATIONS, GET_GUESTS, GET_NEWUSERS } from './actions'
+import { ADD_ACCOUNT, GET_TEAMS, GET_LOCATIONS, GET_GUESTS, GET_NEWUSERS, GET_ALLUSERS } from './actions'
 
 const DEFAULT_STATE = {
   searchTerm: '',
   fullName: 'poep',
   account: {},
   teams: [],
-  locations: []
+  locations: [],
+  accounts: []
 }
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch (action.type) {
@@ -17,6 +18,8 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
      return {...state, locations: action.payload.data}
     case GET_GUESTS:
      return {...state, guests: action.payload.data}
+    case GET_ALLUSERS:
+     return {...state, accounts: action.payload.data}
     case GET_NEWUSERS:
      return {...state, newusers: action.payload.data}
     default:
