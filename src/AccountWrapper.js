@@ -37,7 +37,7 @@ const AccountWrapper = React.createClass({
   componentDidMount () {
     this.props.fetchTeams().then( ()=> {
       let err = 'You are not authorized'
-        this.setState({ open: true, err:err})
+        //this.setState({ open: true, err:err})
     } )
     this.props.fetchLocations()
     this.props.fetchGuests()
@@ -59,7 +59,7 @@ const AccountWrapper = React.createClass({
   
   render () {
     const { teams, locations, guests, newusers, mode, accounts } = this.props
-    if (this.state.err) return <AlertDialog message={this.state.err} url='http://www.google.com'/>
+    if (this.state.err) return <AlertDialog message={this.state.err} url='/'/>
     if (!newusers || !teams || !guests || !newusers ) return <div>Loading</div>
     const reduceGuests = guests.map(guest=>guest.login)
     const users = newusers.filter(user=> {
