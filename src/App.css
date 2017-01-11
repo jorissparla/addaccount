@@ -38,7 +38,7 @@
   justify-content: center
 }
 body {
-  margin-left: 50px;
+  margin-left: 10px;
   background:#ffc600;
 }
 @keyframes App-logo-spin {
